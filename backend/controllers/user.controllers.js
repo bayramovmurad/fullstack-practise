@@ -15,9 +15,19 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
+export const deleteUser = async (req, res) => {
+    const {id} = req.params;
+
+    const user = await UserModel.findByIdAndDelete(id)
+    return res.status(200).json({user})
+
+  
+
+}
+
 export const addRegisterUser = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, role} = req.body;
 
         if (!username || !email || !password) {
             return res.status(400).json({ message: 'All fields are required' });
@@ -39,6 +49,8 @@ export const addRegisterUser = async (req, res) => {
             username,
             email,
             password: hashedPassword,
+            role: role || 'user'
+
         });
 
         await newUser.save();
@@ -51,7 +63,7 @@ export const addRegisterUser = async (req, res) => {
 
 export const addLoginUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, role} = req.body;
 
         if (!email || !password) {
             return res.status(400).json({ message: 'Email and password are required' });
@@ -67,7 +79,7 @@ export const addLoginUser = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id, role: user.role}, SECRET_KEY, { expiresIn: '1h' });
 
         res.status(200).json({
             message: 'User logged in successfully',
@@ -76,8 +88,12 @@ export const addLoginUser = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
+                role: user.role
             },
         });
+
+        console.log(user);
+        
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });
     }
