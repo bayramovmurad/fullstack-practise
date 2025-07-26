@@ -63,7 +63,7 @@ export const addRegisterUser = async (req, res) => {
 
 export const addLoginUser = async (req, res) => {
     try {
-        const { email, password, role} = req.body;
+        const { email, password } = req.body;
 
         if (!email || !password) {
             return res.status(400).json({ message: 'Email and password are required' });

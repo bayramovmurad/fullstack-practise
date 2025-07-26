@@ -1,6 +1,12 @@
+import Login from "./components/Login"
+import Register from "./components/Register"
+
 const App = () => {
   return (
-    <div className="text-red-500">App</div>
+    <div>
+      <Register />
+      <Login/>
+    </div>
   )
 }
 export default App

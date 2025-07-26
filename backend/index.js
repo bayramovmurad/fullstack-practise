@@ -8,7 +8,7 @@ import UserRouter from "./routes/user.route.js"
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5009',
+    origin: 'http://localhost:5174',
     credentials: true
 }));
 dotenv.config();
